@@ -109,21 +109,21 @@ begin
 
    Put_Line ("TEST 12 -- Contract Enforcements (Preconditions)");
    declare
-      Check_Result : Boolean;
+      Is_Valid : Boolean;
       Invalid_Point : constant Point := (X => To_Big_Integer(0), Y => To_Big_Integer(0));
    begin
-      Check_Result := Verify_Pure (Curve, Msg, Invalid_Point, Sig);
-      Check ("12.1 Bad public key silently accepted (FAIL)", False);
+      Is_Valid := Verify_Pure (Curve, Msg, Invalid_Point, Sig);
+      Check ("12.1 Bad public key silently accepted (FAIL). Valid: " & Boolean'Image (Is_Valid), False);
    exception
       when others =>
          Check ("12.1 Precondition strictly rejects bad public keys", True);
    end;
    declare
-      Check_Result : Boolean;
+      Is_Valid : Boolean;
       Invalid_Sig : constant Signature := (R => (To_Big_Integer(0), To_Big_Integer(0)), S => Sig.S);
    begin
-      Check_Result := Verify_Pure (Curve, Msg, Pub_Key, Invalid_Sig);
-      Check ("12.2 Bad signature 'R' silently accepted (FAIL)", False);
+      Is_Valid := Verify_Pure (Curve, Msg, Pub_Key, Invalid_Sig);
+      Check ("12.2 Bad signature 'R' silently accepted (FAIL). Valid: " & Boolean'Image (Is_Valid), False);
    exception
       when others =>
          Check ("12.2 Precondition safely blocks out of bound signatures", True);
